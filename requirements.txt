@@ -1,0 +1,10 @@
+pytube
+langchain
+openai
+transformers
+pytube
+ffmpeg-python
+librosa
+torchaudio
+pydub
+-e .
