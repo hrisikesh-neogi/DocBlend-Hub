@@ -158,5 +158,15 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
+.chainlit
 notebooks/File Organizing with Python Rename Move Copy & Delete Files and Folders.mp4
 notebooks/File Organizing with Python Rename Move Copy & Delete Files and Folders.wav
+
+#artifacts
+artifacts/
+chainlit.md
+
+*.mp4
+*.wav
+*.csv
+*.txt
