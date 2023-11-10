@@ -3,26 +3,23 @@ import sys
 from typing import List
 
 from langchain.schema import Document
-
-from src.logger import logging as lg
+from streamlit.runtime.uploaded_file_manager import UploadedFile
+from src.pipeline.docchat_pipeline import DocChatPipeline
 from src.exception import SummarizerException
 from src.constant import *
-from src.pipeline.base_pipeline import BasePipeline
+from src.pipeline.summarizer.base_pipeline import BasePipeline
 from langchain.document_loaders import TextLoader
-from langchain.chains import LLMChain
 from langchain.llms import OpenAI
-from langchain.chains.summarize import load_summarize_chain
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from langchain.chains import ReduceDocumentsChain, MapReduceDocumentsChain
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-class SummarizerPipeline(BasePipeline):
 
-    def __init__(self, video_url):
-        super().__init__(video_url)
-        self.model = OpenAI()
+class SummarizerPipeline(BasePipeline):
+    video_url = None
+    model = OpenAI()
 
     def load_transcript_as_docs(self) -> List[Document]:
         try:
@@ -43,7 +40,8 @@ class SummarizerPipeline(BasePipeline):
         except Exception as e:
             raise SummarizerException(e, sys)
 
-    def get_map_reduce_chain(self):
+    @staticmethod
+    def get_map_reduce_chain(model: OpenAI):
 
         try:
 
@@ -54,7 +52,7 @@ class SummarizerPipeline(BasePipeline):
 
             map_prompt = PromptTemplate.from_template(map_template)
 
-            map_chain = LLMChain(llm=self.model, prompt=map_prompt)
+            map_chain = LLMChain(llm=model, prompt=map_prompt)
 
             reduce_template = """The following is set of summaries of a transcripted video:
             {doc_summaries}
@@ -63,7 +61,7 @@ class SummarizerPipeline(BasePipeline):
 
             reduce_prompt = PromptTemplate.from_template(reduce_template)
 
-            reduce_chain = LLMChain(llm=self.model, prompt=reduce_prompt)
+            reduce_chain = LLMChain(llm=model, prompt=reduce_prompt)
 
             combine_documents_chain = StuffDocumentsChain(
                 llm_chain=reduce_chain, document_variable_name="doc_summaries"
@@ -86,10 +84,11 @@ class SummarizerPipeline(BasePipeline):
 
         except Exception as e:
             raise SummarizerException(e, sys)
+
     def summarize(self):
         try:
 
-            chain = self.get_map_reduce_chain()
+            chain = SummarizerPipeline.get_map_reduce_chain(model=self.model)
 
             transcript_doc = self.load_transcript_as_docs()
 
@@ -102,3 +101,35 @@ class SummarizerPipeline(BasePipeline):
 
         except Exception as e:
             raise SummarizerException(e, sys)
+
+    @staticmethod
+    def summarize_transcript(transcript: str):
+        try:
+            chain = SummarizerPipeline.get_map_reduce_chain(model=OpenAI())
+
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=20)
+            transcript_docs = text_splitter.create_documents([transcript])
+            print("transcript docs", transcript_docs)
+            output = chain(transcript_docs)
+
+            return output
+
+        except Exception as e:
+            raise SummarizerException(e, sys)
+
+
+    def summarize_pdf(self,uploaded_doc: UploadedFile):
+        if uploaded_doc:
+            doc_pipeline = DocChatPipeline(uploaded_doc=uploaded_doc)
+            saved_file_path = doc_pipeline.save_uploaded_doc()
+
+            docs = doc_pipeline.load_docs(saved_file_path)
+            chunks = doc_pipeline.split_documents(docs)
+
+            chain = SummarizerPipeline.get_map_reduce_chain(model=OpenAI())
+            output = chain(chunks)
+            return output
+
+
+
+

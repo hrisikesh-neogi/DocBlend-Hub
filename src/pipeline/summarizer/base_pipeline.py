@@ -12,8 +12,7 @@ from src.exception import SummarizerException
 
 
 class BasePipeline:
-    def __init__(self, video_url: str):
-        self.video_url = video_url
+    video_url: str = None
 
     @property
     def data_ingestion_artifact(self) -> DataIngestionArtifact:
