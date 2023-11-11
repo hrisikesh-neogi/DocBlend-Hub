@@ -63,13 +63,13 @@ class GenerateTranscript:
 
             os.makedirs(self.transcription_config.transcription_dir, exist_ok=True)
             if return_timestamp:
-                transcript = prediction["chunks"]  # list[timestamp, text]
-                texts = [text["text"] for text in transcript["chunks"]]
-                times = [text["timestamp"] for text in transcript["chunks"]]
+                transcript = prediction["chunks"]
+                texts = [text["text"] for text in transcript]
+                times = [text["timestamp"] for text in transcript]
 
                 data = pd.DataFrame()
-                data["timestamp"] = times
-                data["text"] = texts
+                data["Timestamp(IN SEC)"] = times
+                data["Text"] = texts
 
                 transcript_file_ext = "csv"
                 transcript_store_dir = os.path.join(

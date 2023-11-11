@@ -170,3 +170,8 @@ chainlit.md
 *.wav
 *.csv
 *.txt
+
+test.py
+*.sh
+
+tmp

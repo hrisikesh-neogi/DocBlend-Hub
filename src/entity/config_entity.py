@@ -31,8 +31,12 @@ class TranscriptionConfig:
     transcription_dir: str = os.path.join(training_pipeline_config.artifact_dir, TRANSCRIPTION_DIR_NAME)
 
 
-
-
+@dataclass
+class ChatWithDocsConfig:
+    chat_with_docs_dir: str = os.path.join(training_pipeline_config.artifact_dir, CHAT_WITH_DOCS_DIR_NAME)
+@dataclass
+class VectorDbConfig:
+    vector_db_dir: str = os.path.join(TEMPORARY_DIR,VECTORDB_DIR_NAME)
 
 
 

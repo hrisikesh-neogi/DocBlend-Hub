@@ -1,0 +1,7 @@
+./env
+__pycache__
+.chainlit
+.idea
+.ipynb_checkpoints
+artifacts
+/notebooks

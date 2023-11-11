@@ -19,8 +19,8 @@ class DataTransformation:
 
     @staticmethod
     def convert_video_to_audio(
-                               video_file,
-                               output_ext="wav"):
+            video_file,
+            output_ext="wav"):
 
         """Converts video to audio using MoviePy library
                        that uses `ffmpeg` under the hood"""
@@ -33,15 +33,16 @@ class DataTransformation:
             clip.audio.write_audiofile(audio_file_path)
 
             return audio_file_path
-        
+
         except Exception as e:
             raise SummarizerException(e, sys)
 
     def __get_video_file_name(self):
         try:
             files = os.listdir(self.data_ingestion_artifact.data_file_path)
+            video_file_name = "".join([file for file in files if file.endswith(".mp4")])
 
-            return files[0] if len(files) == 1 else files
+            return video_file_name
 
         except Exception as e:
             raise SummarizerException(e, sys)
@@ -49,21 +50,19 @@ class DataTransformation:
     def initiate_data_transformation(self):
         try:
             video_file_name = self.__get_video_file_name()
-
-            if type(video_file_name) != list:
-                video_file_path = os.path.join(
-                    self.data_ingestion_artifact.data_file_path,
-                    video_file_name
-                )
-                audio_file_path = DataTransformation.convert_video_to_audio(
-                    video_file=video_file_path,
-                )
+            video_file_path = os.path.join(
+                self.data_ingestion_artifact.data_file_path,
+                video_file_name
+            )
+            audio_file_path = DataTransformation.convert_video_to_audio(
+                video_file=video_file_path,
+            )
 
             data_transformation_artifact = DataTransformationArtifact(
-                transformed_audio_file_path= audio_file_path
+                transformed_audio_file_path=audio_file_path
             )
 
             return data_transformation_artifact
-        
+
         except Exception as e:
             raise SummarizerException(e, sys)
