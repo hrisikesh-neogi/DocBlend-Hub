@@ -5,6 +5,7 @@ fqdn==1.5.1
 from-root==1.3.0
 jupyterlab==4.0.5
 langchain==0.0.250
+librosa==0.10.0.post2
 moviepy==1.0.3
 openai==0.27.8
 pypdf==3.17.0
