@@ -1,5 +1,6 @@
 # DocBlend Hub
-![image](https://github.com/hrisikesh-neogi/DocBlend-Hub/assets/78023847/83f528ce-365b-4c17-ac0e-902ed26ae7d1)
+![image](https://github.com/hrisikesh-neogi/DocBlend-Hub/assets/78023847/558b2fdf-c0b4-4fe9-9baf-96e506f201ee)
+
 
 This project leverages the use of LLMs, langchain, openai and vectorstores. 
 
