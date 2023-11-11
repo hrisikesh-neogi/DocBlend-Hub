@@ -1,4 +1,4 @@
-# Document Util
+# DocBlend Hub
 ![image](https://github.com/hrisikesh-neogi/DocBlend-Hub/assets/78023847/83f528ce-365b-4c17-ac0e-902ed26ae7d1)
 
 This project leverages the use of LLMs, langchain, openai and vectorstores. 

@@ -1,9 +1,9 @@
 import streamlit as st
 
 HOME_PAGE_DETAIL = """
-# Document Utiliy
+# DocBlend Hub
 
-This is a utility for document summarization, video summarization and video transcript generation.
+DocBlend Hub is a utility hub for document summarization, video summarization and video transcript generation.
 
 ## Features
 
